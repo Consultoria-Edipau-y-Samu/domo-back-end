@@ -1,0 +1,55 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+dist/
+build/
+*.whl
+
+# FastAPI specific
+*.sqlite3  # SQLite database files
+*.env      # Environment variable files
+instance/
+.venv/
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+*.pyc
+
+# IDEs
+# PyCharm
+.idea/
+*.iml
+
+# VSCode
+.vscode/
+.settings/
+.history/
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Coverage reports
+.coverage
+coverage.xml
+htmlcov/
+
+# MyPy
+.mypy_cache/
+
+# Bandit
+.bandit/
+
+# Pytest
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+
+# Pyre type checker
+.pyre/
