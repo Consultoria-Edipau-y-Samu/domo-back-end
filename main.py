@@ -1,32 +1,14 @@
 from fastapi import FastAPI
-from pydantic import BaseModel
-from typing import List
 from fastapi.middleware.cors import CORSMiddleware
-from uuid import uuid4
-
-
-class Address(BaseModel):
-    street: str
-    neighborhood: str
-    zipCode: str
-    city: str
-    state: str
-
-
-class Review(BaseModel):
-    id: str
-    date: str
-    description: str
-    emotion: str
-    price: str
-
-
-class AddressReviewResponse(BaseModel):
-    address: Address
-    reviews: List[Review]
+from routers.view_review import router as view_review_router
+from routers.user import router as user_router
 
 
 app = FastAPI()
+
+app.include_router(view_review_router, prefix="/view-review", tags=["view_review"])
+app.include_router(user_router, prefix="/user", tags=["user"])
+
 
 # CORS settings
 origins = [
@@ -50,67 +32,3 @@ async def root():
 @app.get("/hello/{name}")
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
-
-
-@app.get("/view-review/review/{review_id}", response_model=AddressReviewResponse)
-async def view_review(review_id: str):
-    return AddressReviewResponse(
-        address=Address(
-            street="Nantes 2839",
-            neighborhood="Jardines de Altavista",
-            zipCode="54876",
-            city="Monterrey",
-            state="NL",
-        ),
-        reviews=[
-            Review(
-                id=str(uuid4()),
-                date="Hace 3 días",
-                description="En mi depa habían muchas cucarachas y no tiene clima, ni agua caliente",
-                emotion="frown",
-                price="$15,000",
-            ),
-            Review(
-                id=str(uuid4()),
-                date="Hace 4 días",
-                description="Me gustaba porque me daban de comer gratis",
-                emotion="laugh",
-                price="$13,000",
-            ),
-            Review(
-                id=str(uuid4()),
-                date="Hace 5 días",
-                description="Se escucha todo, no dejaban coger a gusto",
-                emotion="angry",
-                price="$11,000",
-            ),
-            Review(
-                id=str(uuid4()),
-                date="Hace 12 días",
-                description="Esta bien, recomiendo",
-                emotion="meh",
-                price="$10,000",
-            ),
-            Review(
-                id=str(uuid4()),
-                date="Hace 1 mes",
-                description="Esta muy chido, la neta",
-                emotion="smile",
-                price="$30,000",
-            ),
-            Review(
-                id=str(uuid4()),
-                date="Hace 4 anios",
-                description="Esta muy chido, la neta",
-                emotion="smile",
-                price="$30,000",
-            ),
-            Review(
-                id=str(uuid4()),
-                date="Hace mil meses    ",
-                description="Esta muy chido, la neta",
-                emotion="smile",
-                price="$30,000",
-            ),
-        ],
-    )
