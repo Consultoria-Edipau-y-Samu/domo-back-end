@@ -22,9 +22,10 @@ jobs:
           mkdir -p lambda_package
           pip install -r requirements.txt -t lambda_package/
 
-      - name: Copy source code files into lambda_package
+      - name: Copy source code and routers folder into lambda_package
         run: |
-          find . -type f -not -path "./lambda_package/*" -exec cp {} lambda_package/ \;
+          cp main.py lambda_package/
+          cp -r routers lambda_package/
 
       - name: Create Zip file for Lambda function
         run: |
