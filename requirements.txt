@@ -90,7 +90,7 @@ pydot==3.0.2
 Pygments==2.18.0
 PyJWT==2.9.0
 pyOpenSSL==24.2.1
-pyparsing==3.2.0
+pyparsing
 pyperclip==1.9.0
 python-barbicanclient==7.0.0
 python-cinderclient==9.6.0
