@@ -1,7 +1,7 @@
 alembic==1.13.3
 amqp==5.2.0
 annotated-types==0.7.0
-anyio==4.6.0
+anyio
 attrs==24.2.0
 automaton==3.2.0
 autopage==0.5.2
