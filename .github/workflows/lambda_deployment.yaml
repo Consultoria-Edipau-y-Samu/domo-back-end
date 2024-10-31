@@ -17,11 +17,14 @@ jobs:
         with:
           python-version: '3.8'  # Ensure this matches your Lambda runtime
 
-      - name: Install dependencies
+      - name: Install dependencies into lambda_package
         run: |
           mkdir -p lambda_package
           pip install -r requirements.txt -t lambda_package/
-          cp -r . lambda_package/
+
+      - name: Copy source code files into lambda_package
+        run: |
+          find . -type f -not -path "./lambda_package/*" -exec cp {} lambda_package/ \;
 
       - name: Create Zip file for Lambda function
         run: |
