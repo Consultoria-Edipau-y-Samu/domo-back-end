@@ -79,7 +79,7 @@ PasteDeploy==3.1.0
 pbr==6.1.0
 pecan==1.5.1
 platformdirs==4.3.6
-prettytable==3.12.0
+prettytable
 prometheus_client==0.21.0
 psutil==6.1.0
 pycadf==3.1.1
