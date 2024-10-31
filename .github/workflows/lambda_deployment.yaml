@@ -9,12 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Install zip tool
-        uses: montudor/action-zip@v1
+      - name: Check out the code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.8'  # Ensure this matches your Lambda runtime
+
+      - name: Install dependencies
+        run: |
+          mkdir -p lambda_package
+          pip install -r requirements.txt -t lambda_package/
+          cp -r . lambda_package/
+
       - name: Create Zip file for Lambda function
-        run: zip -r code.zip .
-      - name: AWS CLI v2
+        run: |
+          cd lambda_package
+          zip -r ../code.zip .
+          cd ..
+
+      - name: Deploy to AWS Lambda
         uses: imehedi/actions-awscli-v2@latest
         with:
           args: "lambda update-function-code \
