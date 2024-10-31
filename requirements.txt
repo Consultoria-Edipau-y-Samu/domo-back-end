@@ -1,5 +1,4 @@
 alembic==1.13.3
-altgraph @ file:///AppleInternal/Library/BuildRoots/626bfa9c-8221-11ef-b9bf-daac7d5d70b1/Library/Caches/com.apple.xbs/Sources/python3/altgraph-0.17.2-py2.py3-none-any.whl
 amqp==5.2.0
 annotated-types==0.7.0
 anyio==4.6.0
@@ -25,7 +24,6 @@ exceptiongroup==1.2.2
 fastapi==0.115.0
 fastapi-cli==0.0.5
 fasteners==0.19
-future @ file:///AppleInternal/Library/BuildRoots/626bfa9c-8221-11ef-b9bf-daac7d5d70b1/Library/Caches/com.apple.xbs/Sources/python3/future-0.18.2-py3-none-any.whl
 futurist==3.0.0
 greenlet==3.1.1
 h11==0.14.0
@@ -45,7 +43,6 @@ keystoneauth1==5.8.0
 keystonemiddleware==10.7.1
 kombu==5.4.2
 logutils==0.3.5
-macholib @ file:///AppleInternal/Library/BuildRoots/626bfa9c-8221-11ef-b9bf-daac7d5d70b1/Library/Caches/com.apple.xbs/Sources/python3/macholib-1.15.2-py2.py3-none-any.whl
 magnum==19.0.0
 Mako==1.3.6
 markdown-it-py==3.0.0
@@ -120,7 +117,6 @@ Routes==2.5.1
 rpds-py==0.20.1
 shellingham==1.5.4
 simplegeneric==0.8.1
-six @ file:///AppleInternal/Library/BuildRoots/626bfa9c-8221-11ef-b9bf-daac7d5d70b1/Library/Caches/com.apple.xbs/Sources/python3/six-1.15.0-py2.py3-none-any.whl
 sniffio==1.3.1
 SQLAlchemy==2.0.36
 starlette==0.38.6
