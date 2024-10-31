@@ -1,3 +1,5 @@
+from mangum import Mangum
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from routers.view_review import router as view_review_router
@@ -32,3 +34,7 @@ async def root():
 @app.get("/hello/{name}")
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
+
+
+# Create the Mangum handler
+handler = Mangum(app)
