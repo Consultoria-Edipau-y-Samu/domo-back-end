@@ -4,3 +4,4 @@ pydantic==2.9.2
 typing_extensions==4.12.2
 starlette==0.38.6
 anyio==4.6.0
+uvicorn
