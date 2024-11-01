@@ -1,4 +1,3 @@
-from mangum import Mangum
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -35,6 +34,3 @@ async def root():
 async def say_hello(name: str):
     return {"message": f"Hello {name}"}
 
-
-# Create the Mangum handler
-handler = Mangum(app)
