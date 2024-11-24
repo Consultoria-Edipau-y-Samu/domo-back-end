@@ -1,14 +1,20 @@
 
 from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
+from app.routes import user
+
+
 
 
 app = FastAPI()
 
 
+app.include_router(user.router)
+
+
+
+
 @app.get("/")
 async def root():
     return {"message": "Hello World from Lambda"}
-
 
 
