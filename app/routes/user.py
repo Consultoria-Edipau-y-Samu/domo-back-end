@@ -5,24 +5,28 @@ from app.db import get_table
 # Define el esquema del usuario
 class User(BaseModel):
     user_id: str
-    user_name: str
+    name: str
+    last_name: str
+    email: str
 
 router = APIRouter()
 
-@router.get("/user")
-async def read_items(table=Depends(get_table("domo-users"))):
+users_table = get_table("domo-users")
+
+@router.get("/users")
+async def read_items(table=Depends(users_table)):
     # Escanear la tabla y devolver los ítems
     response = table.scan()
     return response.get("Items", [])
 
 @router.post("/user")
-async def add_item(item: User, table=Depends(get_table("domo-users"))):
+async def add_item(item: User, table=Depends(users_table)):
     # Insertar un ítem en la tabla
     table.put_item(Item=item.dict())
     return {"message": "Item added successfully", "item": item.dict()}
 
 @router.get("/user/{user_id}")
-async def get_user(user_id: str, table=Depends(get_table("domo-users"))):
+async def get_user(user_id: str, table=Depends(users_table)):
     # Obtener un usuario por ID
     response = table.get_item(Key={"user_id": user_id})
     if "Item" not in response:
@@ -30,7 +34,7 @@ async def get_user(user_id: str, table=Depends(get_table("domo-users"))):
     return response["Item"]
 
 @router.delete("/user/{user_id}")
-async def delete_user(user_id: str, table=Depends(get_table("domo-users"))):
+async def delete_user(user_id: str, table=Depends(users_table)):
     # Eliminar un usuario por ID
     response = table.delete_item(Key={"user_id": user_id}, ReturnValues="ALL_OLD")
     if "Attributes" not in response:
@@ -38,7 +42,7 @@ async def delete_user(user_id: str, table=Depends(get_table("domo-users"))):
     return {"message": "User deleted successfully", "deleted_item": response["Attributes"]}
 
 @router.put("/user/{user_id}")
-async def update_user(user_id: str, updates: User, table=Depends(get_table("domo-users"))):
+async def update_user(user_id: str, updates: User, table=Depends(users_table)):
     # Preparar la expresión de actualización y los valores de atributos
     update_expression = "SET " + ", ".join(f"{k} = :{k}" for k in updates.dict() if updates.dict()[k] is not None)
     expression_attribute_values = {f":{k}": v for k, v in updates.dict().items() if v is not None}

@@ -11,3 +11,8 @@ sudo docker logs -f domo-back-end
 sudo docker run -d -p 8080:8080 \
     -v ~/.aws:/root/.aws \
     --name domo-back-end domo-back-end
+
+sudo docker run -d -p 8080:8080 \
+    -v ~/.aws:/root/.aws \
+    -v $(pwd):/app \
+    --name domo-back-end domo-back-end
