@@ -20,7 +20,7 @@ export const handler = async (event: APIGatewayProxyEventV2) => {
       };
     }
 
-    if (method === "readUser") {
+    if (method === "getUser") {
       try {
         const result = await getUser(body);
         return {

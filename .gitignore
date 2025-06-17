@@ -60,3 +60,4 @@ package-lock.json
 lambda.zip
 node_modules
 infra/.terraform/providers/registry.terraform.io
+infra/secrets.auto.tfvars
