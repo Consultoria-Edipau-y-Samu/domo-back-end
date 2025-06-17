@@ -1,17 +1,23 @@
-# Main VPC for our infrastructure
+#--------------------------------------------------
+# MAIN VPC CONFIGURATION
+#--------------------------------------------------
 resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
+  cidr_block = "10.0.0.0/16"  # Private IP range for the VPC
 
-  enable_dns_support   = true    # 👈 necesario
-  enable_dns_hostnames = true    # 👈 necesario
+  # Enable DNS features required for interface endpoints like Secrets Manager
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 
   tags = {
     Name = "main-vpc"
   }
 }
 
+#--------------------------------------------------
+# PRIVATE SUBNETS (for Lambda and Aurora)
+#--------------------------------------------------
 
-# First private subnet (AZ us-east-1a)
+# Private Subnet in Availability Zone us-east-1a
 resource "aws_subnet" "private1" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.1.0/24"
@@ -22,7 +28,7 @@ resource "aws_subnet" "private1" {
   }
 }
 
-# Second private subnet (AZ us-east-1b)
+# Private Subnet in Availability Zone us-east-1b
 resource "aws_subnet" "private2" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.2.0/24"
@@ -33,20 +39,27 @@ resource "aws_subnet" "private2" {
   }
 }
 
+#--------------------------------------------------
+# VPC ENDPOINT FOR SECRETS MANAGER
+#--------------------------------------------------
 
-# VPC Endpoint for Secrets Manager
 resource "aws_vpc_endpoint" "secretsmanager" {
   vpc_id            = aws_vpc.main.id
-  service_name      = "com.amazonaws.us-east-1.secretsmanager"
-  vpc_endpoint_type = "Interface"
-  subnet_ids        = [
+  service_name      = "com.amazonaws.us-east-1.secretsmanager"  # AWS service endpoint
+  vpc_endpoint_type = "Interface"  # Required for Secrets Manager
+
+  # Attach endpoint to both private subnets
+  subnet_ids = [
     aws_subnet.private1.id,
     aws_subnet.private2.id
   ]
+
+  # Allow access from Lambda's security group
   security_group_ids = [
     aws_security_group.lambda_sg.id
   ]
 
+  # Required to resolve *.secretsmanager.amazonaws.com to the VPC endpoint
   private_dns_enabled = true
 
   tags = {
@@ -54,14 +67,15 @@ resource "aws_vpc_endpoint" "secretsmanager" {
   }
 }
 
-# Allow Lambda to reach Secrets Manager VPC Endpoint over HTTPS
+#--------------------------------------------------
+# SG RULE: ALLOW HTTPS TO SECRETS MANAGER FROM LAMBDA SG
+#--------------------------------------------------
+
 resource "aws_security_group_rule" "allow_lambda_to_secretsmanager" {
   type                     = "ingress"
-  from_port                = 443
+  from_port                = 443     # HTTPS port
   to_port                  = 443
   protocol                 = "tcp"
   security_group_id        = aws_security_group.lambda_sg.id
-  source_security_group_id = aws_security_group.lambda_sg.id
+  source_security_group_id = aws_security_group.lambda_sg.id  # Self-allow within Lambda SG
 }
-
-
