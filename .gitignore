@@ -53,3 +53,9 @@ coverage.xml
 
 # Pyre type checker
 .pyre/
+
+
+
+package-lock.json
+lambda.zip
+node_modules

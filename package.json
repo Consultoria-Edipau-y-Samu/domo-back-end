@@ -1,0 +1,25 @@
+{
+  "name": "domo-back-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/index.ts",
+  "type": "commonjs",
+  "scripts": {
+    "build": "esbuild src/index.ts --bundle --platform=node --target=node18 --outfile=build/index.js",
+    "zip": "npm run build && cd build && zip ../lambda.zip index.js && cd ..",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.119",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "mysql2": "^3.14.1",
+    "prettier": "^3.5.3",
+    "uuid": "^11.1.0"
+  }
+}
