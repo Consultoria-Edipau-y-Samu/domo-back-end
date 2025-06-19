@@ -12,28 +12,44 @@ import bcrypt from "bcryptjs";
 
 export const postUser = async (data: PostUserInput) => {
   // Validate minimal required fields
-  if (!data.name || !data.email || !data.password) {
+  if (!data.username || !data.email || !data.password || !data.name || !data.age) {
     throw new Error("Missing required fields");
+  }
+
+  const { success: emailSuccess } = await isEmailTaken({ email: data.email });
+
+  if (emailSuccess) {
+    throw new Error("Email already taken");
+  }
+
+  const { success: usernameSuccess } = await isUsernameTaken({ username: data.username });
+
+  if (usernameSuccess) {
+    throw new Error("Username already taken");
   }
 
   // Generate UUID and hashed password
   const userId = uuidv4();
   const passwordHash = await hashPassword(data.password);
 
+  //validate password?
+
   // Call repository to persist
   await insertUser({
     userId,
     name: data.name,
     email: data.email,
-    username: data.username || null,
-    age: data.age || null,
+    username: data.username,
+    age: data.age,
     passwordHash,
   });
 
-  return { success: true, userId };
+  return { success: true, message: "User created successfully." };
 };
 
-export const isEmailTaken = async (data: GetUserEmailInput) => {
+export const isEmailTaken = async (
+  data: GetUserEmailInput
+): Promise<{ success: boolean; message: string }> => {
   if (!data.email) {
     throw new Error("Email is required");
   }

@@ -13,11 +13,18 @@ export const handler = async (event: APIGatewayProxyEventV2) => {
     const method = body.method;
 
     if (method === "postUser") {
-      const result = await postUser(body);
-      return {
-        statusCode: 200,
-        body: JSON.stringify(result),
-      };
+      try {
+        const result = await postUser(body);
+        return {
+          statusCode: 200,
+          body: JSON.stringify(result),
+        };
+      } catch (err: any) {
+        return {
+          statusCode: 400,
+          body: JSON.stringify({ error: err.message }),
+        };
+      }
     }
 
     if (method === "getUser") {
@@ -50,7 +57,7 @@ export const handler = async (event: APIGatewayProxyEventV2) => {
       }
     }
 
-    if (method === "getUserUsername") {
+    if (method === "isUsernameTaken") {
       try {
         const result = await isUsernameTaken(body);
         return {
