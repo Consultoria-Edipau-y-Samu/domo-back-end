@@ -7,7 +7,7 @@ import {
   PostUserInput,
   GetUserInput,
 } from "../types/userTypes";
-import { hashPassword } from "../utils/password";
+import { hashPassword, validatePassword } from "../utils/password";
 import bcrypt from "bcryptjs";
 
 export const postUser = async (data: PostUserInput) => {
@@ -16,23 +16,32 @@ export const postUser = async (data: PostUserInput) => {
     throw new Error("Missing required fields");
   }
 
-  const { success: emailSuccess } = await isEmailTaken({ email: data.email });
+  // Trim all string fields except password
+  data.username = data.username.trim();
+  data.email = data.email.trim().toLowerCase();
+  data.name = data.name.trim();
 
-  if (emailSuccess) {
+  const { success: emailTaken } = await isEmailTaken({ email: data.email });
+
+  if (emailTaken) {
     throw new Error("Email already taken");
   }
 
-  const { success: usernameSuccess } = await isUsernameTaken({ username: data.username });
+  const { success: usernameTaken } = await isUsernameTaken({ username: data.username });
 
-  if (usernameSuccess) {
+  if (usernameTaken) {
     throw new Error("Username already taken");
+  }
+
+  const { success: isPasswordValid, message } = validatePassword(data.password);
+
+  if (!isPasswordValid) {
+    throw new Error(message);
   }
 
   // Generate UUID and hashed password
   const userId = uuidv4();
   const passwordHash = await hashPassword(data.password);
-
-  //validate password?
 
   // Call repository to persist
   await insertUser({
