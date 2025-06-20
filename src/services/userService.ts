@@ -1,14 +1,22 @@
 import { v4 as uuidv4 } from "uuid";
-import { insertUser, findUser, findEmail, findUsername } from "../repositories/userRepo";
+import {
+  insertUser,
+  findUser,
+  findEmail,
+  findUsername,
+  removeUser,
+} from "../repositories/userRepo";
 import {
   AuthenticateUserInput,
   GetUserEmailInput,
   GetUserUsernameInput,
   PostUserInput,
   GetUserInput,
+  DeleteUserInput,
 } from "../types/userTypes";
 import { hashPassword, validatePassword } from "../utils/password";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
 export const postUser = async (data: PostUserInput) => {
   // Validate minimal required fields
@@ -121,8 +129,28 @@ export const authenticateUser = async (data: AuthenticateUserInput) => {
     throw new Error("Invalid credentials");
   }
 
+  const token = jwt.sign(
+    { userId: user.userId, username: user.username, email: user.email },
+    "superSecret",
+    { expiresIn: "1h" }
+  );
+
   // Optional: remove passwordHash before returning
   delete user.passwordHash;
 
-  return { success: true, user };
+  return { success: true, user, token };
+};
+
+export const deleteUser = async (data: DeleteUserInput) => {
+  if (!data.email && !data.username) {
+    throw new Error("Missing required fields");
+  }
+
+  const result = await removeUser(data);
+
+  if (result.affectedRows === 0) {
+    throw new Error("User not found");
+  }
+
+  return { success: true, message: "User deleted successfully." };
 };

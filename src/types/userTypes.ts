@@ -24,3 +24,8 @@ export interface GetUserInput {
   email?: string;
   username?: string;
 }
+
+export interface DeleteUserInput {
+  email?: string;
+  username?: string;
+}

@@ -55,3 +55,16 @@ export const findUsername = async (email: string) => {
     await conn.end();
   }
 };
+
+export const removeUser = async (input: any) => {
+  const conn = await getConnection();
+  try {
+    const [result] = await conn.execute(`DELETE FROM Users WHERE email = ? OR username = ?`, [
+      input.email ?? null,
+      input.username ?? null,
+    ]);
+    return result;
+  } finally {
+    await conn.end();
+  }
+};
